@@ -1,0 +1,14 @@
+imports:
+- path: instance.py
+- path: networking.py
+- path: network.py
+- path: firewall.py
+- path: database.py
+
+resources:
+- name: scraping instance
+  type: instance.py
+- name: neworking-infra
+  type: networking.py
+- name: database-instance
+  type: database.py
