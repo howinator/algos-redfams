@@ -11,5 +11,16 @@ def GenerateConfig(u):
                 'ports': [80]
             }]
         }
+    }, {
+        'name': 'b-firewall-rule',
+        'type': 'compute.v1.firewall',
+        'properties': {
+            'network': '$(regf.algos-reddit-network.selfLink)'
+            'sourceRanges': ['$(ref.algos-reddit-network.IPv4Range)'],
+            'allowed': [{
+                'IPProtocol': 'TCP',
+                'ports': ['0-65535']
+            }]
+        }
     }]
     return {'resources': resources}
