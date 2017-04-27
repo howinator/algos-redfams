@@ -1,15 +1,17 @@
 CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
-  usernamename VARCHAR(25) NOT NULL
+  id SERIAL,
+  username VARCHAR(100) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS subreddits (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(20) NOT NULL
+  id SERIAL,
+  name VARCHAR(100) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS comments (
-  id BIGSERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users (id),
-  subreddit_id INTEGER REFERENCES subreddits (id)
+  id BIGSERIAL,
+  username VARCHAR(100) REFERENCES users (username),
+  subreddit VARCHAR(100) REFERENCES subreddits (name),
+
+  PRIMARY KEY (username, subreddit)
 );

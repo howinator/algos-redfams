@@ -88,3 +88,7 @@ reddit-venv/
 
 # Rope project settings
 .ropeproject
+/infra/vars/creds.yml
+
+# PyCharm
+.idea/dataSources/*
