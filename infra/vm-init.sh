@@ -30,8 +30,6 @@ rm -rf algos-redfams
 git clone https://github.com/howinator/algos-redfams.git
 
 cd algos-redfams
-#git fetch
-#git checkout howie/proditize
 
 virtualenv -p $(which python3.6) reddit-venv --no-site-packages
 source reddit-venv/bin/activate
