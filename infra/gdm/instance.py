@@ -5,12 +5,12 @@ PROJECT_NAME = 'algorithms-reddit'
 def GenerateConfig(u):
 
     resources = [{
-        'name': 'scraper-vm',
+        'name': 'scrapehelp-vm',
         'type': 'compute.v1.instance',
         'properties': {
             'zone': 'us-central1-f',
             'machineType': ''.join([COMPUTE_URL_BASE, 'projects/', PROJECT_NAME,
-                                    '/zones/us-central1-f/', 'machineTypes/n1-standard-1']),
+                                    '/zones/us-central1-f/', 'machineTypes/g1-small']),
             'disks': [{
                 'deviceName': 'boot',
                 'type': 'PERSISTENT',
@@ -26,9 +26,35 @@ def GenerateConfig(u):
                 'network': '$(ref.algos-reddit-network.selfLink)',
                 'accessConfigs': [{
                     'name': 'External NAT',
-                    'type': 'ONE_TO_ONE_NAT'
+                    'type': 'ONE_TO_ONE_NAT',
+                    'natIP': '$(ref.instance-static-ip.address)'
                 }]
-            }]
+            }],
+            'metadata': {
+                'items': [{
+                    'key': 'startup-script',
+                    'value': ''.join(['#!/usr/bin/env bash\n',
+                                      'cd /tmp/\n',
+                                      'git clone https://github.com/howinator/algos-redfams.git\n',
+                                      'cp algos/redfams/infra/vm-init.sh ~\n',
+                                      'cd ~\n',
+                                      './vm-init.sh'
+                                      ])
+                }]
+            },
+            'serviceAccounts': [
+                {
+                    'email': '509708941669-compute@developer.gserviceaccount.com',
+                    'scopes': ['https://www.googleapis.com/auth/cloud-platform']
+                }
+            ]
+        }
+    }, {
+        'name': 'instance-static-ip',
+        'type': 'compute.v1.address',
+        'properties':{
+            'name': 'instance-staic-ip',
+            'region': 'us-central1'
         }
     }]
     return {'resources': resources}
