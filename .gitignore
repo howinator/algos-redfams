@@ -92,3 +92,4 @@ reddit-venv/
 
 # PyCharm
 .idea/dataSources/*
+.idea/workspace.xml
