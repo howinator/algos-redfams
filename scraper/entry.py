@@ -5,9 +5,7 @@
 #  Usage: ./entry.py [local | prod]
 #
 # # # # # # # # # # # # # # # # # # #
-import psycopg2
 import yaml
-import sys
 import scraper.sqlwrapper as sql
 import praw
 
@@ -16,6 +14,7 @@ def main(argv):
     # load config variables
     env = argv
     db_config_file_path = "../infra/vars/{env}.yml".format(env=env)
+    config_vars = {}
     with open(db_config_file_path, 'r') as st:
         try:
             config_vars = yaml.load(st)

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# Named aa-* so that it runs first in docker start-up (run alphabetically)
 set -ex
 
 DB_NAME='algosreddit'
