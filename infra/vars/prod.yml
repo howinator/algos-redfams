@@ -1,0 +1,4 @@
+db_user: postgres
+db_host: 104.198.43.96
+db_port: 5432
+db_name: algosreddit
