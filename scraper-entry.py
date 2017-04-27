@@ -2,19 +2,20 @@
 
 # # # # # # # # # # # # # # # # # # #
 #
-#  Usage: ./entry.py [local | prod]
+#  Usage: ./scraper-entry.py [local | prod]
 #
 # # # # # # # # # # # # # # # # # # #
 import yaml
-import scraper.sqlwrapper as sql
+import scrapehelp.sqlwrapper as sql
 import praw
 import praw.exceptions
+import sys
 
 
 def main(argv):
     # load config variables
     env = argv
-    db_config_file_path = "../infra/vars/{env}.yml".format(env=env)
+    db_config_file_path = "infra/vars/{env}.yml".format(env=env)
     db_password_key = "{env}_pg_pass".format(env=env)
     config_vars = {}
     with open(db_config_file_path, 'r') as st:
@@ -23,7 +24,7 @@ def main(argv):
         except yaml.YAMLError as e:
             print(e)
             raise e
-    creds_file_path = "../infra/vars/creds.yml"
+    creds_file_path = "infra/vars/creds.yml"
     with open(creds_file_path, 'r') as f:
         try:
             creds = yaml.load(f)
@@ -55,5 +56,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main('prod')
-    # main(sys.argv[1:])
+    main(sys.argv[1:][0])

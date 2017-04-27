@@ -5,7 +5,7 @@ PROJECT_NAME = 'algorithms-reddit'
 def GenerateConfig(u):
 
     resources = [{
-        'name': 'scraper-vm',
+        'name': 'scrapehelp-vm',
         'type': 'compute.v1.instance',
         'properties': {
             'zone': 'us-central1-f',
@@ -30,12 +30,19 @@ def GenerateConfig(u):
                     'natIP': '$(ref.instance-static-ip.address)'
                 }]
             }],
-            'metadata': {
-                'items': [{
-                    'key': 'startup-script',
-                    'value': ''.join
-                }]
-            }
+            # 'metadata': {
+            #     'items': [{
+            #         'key': 'startup-script',
+            #         'value': ''.join(['#!/usr/bin/env bash\n',
+            #                           ])
+            #     }]
+            # },
+            'serviceAccounts': [
+                {
+                    'email': '509708941669-compute@developer.gserviceaccount.com',
+                    'scopes': ['https://www.googleapis.com/auth/cloud-platform']
+                }
+            ]
         }
     }, {
         'name': 'instance-static-ip',
