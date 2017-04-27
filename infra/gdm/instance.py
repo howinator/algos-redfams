@@ -30,13 +30,18 @@ def GenerateConfig(u):
                     'natIP': '$(ref.instance-static-ip.address)'
                 }]
             }],
-            # 'metadata': {
-            #     'items': [{
-            #         'key': 'startup-script',
-            #         'value': ''.join(['#!/usr/bin/env bash\n',
-            #                           ])
-            #     }]
-            # },
+            'metadata': {
+                'items': [{
+                    'key': 'startup-script',
+                    'value': ''.join(['#!/usr/bin/env bash\n',
+                                      'cd /tmp/\n',
+                                      'git clone https://github.com/howinator/algos-redfams.git\n',
+                                      'cp algos/redfams/infra/vm-init.sh ~\n',
+                                      'cd ~\n',
+                                      './vm-init.sh'
+                                      ])
+                }]
+            },
             'serviceAccounts': [
                 {
                     'email': '509708941669-compute@developer.gserviceaccount.com',

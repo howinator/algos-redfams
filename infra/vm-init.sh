@@ -27,16 +27,15 @@ installpy
 
 cd /opt/apps
 rm -rf algos-redfams
-{
-    git clone https://github.com/howinator/algos-redfams.git
-} || {
-    echo "repo allready there"
-}
+git clone https://github.com/howinator/algos-redfams.git
 
 cd algos-redfams
+#git fetch
+#git checkout howie/proditize
+
 virtualenv -p $(which python3.6) reddit-venv --no-site-packages
 source reddit-venv/bin/activate
 pip install -r requirements.txt
 
 gsutil cp gs://howinator-config/creds.yml /opt/apps/algos-redfams/infra/vars/creds.yml
-python ./scrape-entry.py prod
+python ./scraper-entry.py prod
