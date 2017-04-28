@@ -16,26 +16,6 @@ import src.helper.aux as aux
 
 
 def main(argv):
-    # load config variables
-    # env = argv
-    # db_config_file_path = "infra/vars/{env}.yml".format(env=env)
-    # db_password_key = "{env}_pg_pass".format(env=env)
-    # config_vars = {}
-    # with open(db_config_file_path, 'r') as st:
-    #     try:
-    #         config_vars = yaml.load(st)
-    #     except yaml.YAMLError as e:
-    #         print(e)
-    #         raise e
-    # creds_file_path = "infra/vars/creds.yml"
-    # with open(creds_file_path, 'r') as f:
-    #     try:
-    #         creds = yaml.load(f)
-    #     except yaml.YAMLError as e:
-    #         print(e)
-    #         raise e
-    #
-    # config_vars['db_pass'] = creds[db_password_key]
     agent_str = 'Scraper script by /u/howinator'
     user = ""
 
