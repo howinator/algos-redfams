@@ -45,7 +45,10 @@ def form_graph(env):
                 else:
                     adj_dict[node_name][mapped_node] = 1
 
-    with open('adj.json', 'w') as outfile:
+
+    dir_name = os.path.dirname(__file__)
+    out_file_path = os.path.join(dir_name, 'out', "adj_{env}.json".format(env=env))
+    with open(out_file_path, 'w') as outfile:
         json.dump(adj_dict, outfile, sort_keys=True, indent=4, separators=(',', ': '))
 
 

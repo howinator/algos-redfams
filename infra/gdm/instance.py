@@ -35,10 +35,11 @@ def GenerateConfig(u):
                     'key': 'startup-script',
                     'value': ''.join(['#!/usr/bin/env bash\n',
                                       'cd /tmp/\n',
+                                      'rm -rf algos-redfams\n',
                                       'git clone https://github.com/howinator/algos-redfams.git\n',
                                       'cp algos-redfams/infra/vm-init.sh ~\n',
                                       'cd ~\n',
-                                      './vm-init.sh\n\n'
+                                      './vm-init.sh\n\n\n'
                                       ])
                 }]
             },

@@ -97,4 +97,4 @@ reddit-venv/
 # LaTeX files
 *.aux
 *.out
-adj.json
+adj*.json
