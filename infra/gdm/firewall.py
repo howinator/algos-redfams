@@ -27,7 +27,7 @@ def GenerateConfig(u):
         'type': 'compute.v1.firewall',
         'properties': {
             'network': '$(ref.algos-reddit-network.selfLink)',
-            'sourceRanges': ['198.214.63.124/32'],
+            'sourceRanges': ['198.214.63.124/32', '72.48.183.29'],
             'allowed': [{
                 'IPProtocol': 'TCP',
                 'ports': ['22']

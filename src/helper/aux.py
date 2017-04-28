@@ -1,4 +1,7 @@
-from typing import List, Dict, Union, Any
+from typing import List, Dict, Union, Any, Tuple
+import os.path
+import yaml
+
 
 import psycopg2 as pg
 import psycopg2.extras as pgextra
@@ -49,12 +52,34 @@ class SQLWrapper(object):
         """
         tuples = zip(usernames, subreddits)
         with self.con.cursor() as cur:
-            pgextra.execute_values(cur,
+            pgextra.execute_values(
+                cur,
                 "INSERT INTO comments (username, subreddit) VALUES %s ON CONFLICT (username, subreddit) DO NOTHING;",
-                tuples)
+                tuples
+            )
             self.con.commit()
 
-    def get_users(self, start: int =None, stop: int =None) -> List[str]:
+    def get_subreddits(self) -> List[Tuple[str]]:
+
+        with self.con.cursor() as cur:
+            cur.execute("SELECT DISTINCT name FROM subreddits ORDER BY name;")
+            results = cur.fetchall()
+
+        return results
+
+    def get_user_sub_pairs(self) -> List[Tuple[str]]:
+        """
+        Simply returns unique (username, subreddit) pairs sorted by username
+        """
+
+        with self.con.cursor() as cur:
+            query="SELECT DISTINCT username, subreddit FROM comments GROUP BY username, subreddit ORDER BY username;"
+            cur.execute(query)
+            results = cur.fetchall()
+
+        return results
+
+    def get_users(self, start: int = None, stop: int = None) -> List[str]:
         """
         Gets users with optional start and stop positions.
         If start and stop are not provided, all users are fetched
@@ -100,3 +125,50 @@ class SQLWrapper(object):
             results = cur.fetchall()
             added_users = [tup[1] for tup in results]
         return added_users
+
+
+class ConfigHelper(object):
+    def __init__(self, env):
+        self._env = env
+        vars_dir_path = self._get_vars_dir_path()
+        self._env_config_file_path = self._form_env_config_path(vars_dir_path)
+        creds_file_path = self._form_creds_path(vars_dir_path)
+        self._creds = self._load_file(creds_file_path)
+
+    @property
+    def config(self):
+        db_password_key = "{env}_pg_pass".format(env=self._env)
+
+        config_vars = self._load_file(self._env_config_file_path)
+
+        config_vars['db_pass'] = self._creds[db_password_key]
+        return config_vars
+
+    @property
+    def creds(self):
+        return self._creds
+
+    @staticmethod
+    def _load_file(path: str) -> Dict[str, str]:
+        file_contents = {}
+        with open(path, 'r') as f:
+            try:
+                file_contents = yaml.load(f)
+            except yaml.YAMLError as e:
+                print(str(e))
+                raise e
+        return file_contents
+
+    @staticmethod
+    def _get_vars_dir_path() -> str:
+        sqlwrapper_file_path = __file__
+        return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(sqlwrapper_file_path))), 'infra', 'vars')
+
+    def _form_env_config_path(self, vars_dir: str) -> str:
+        env_config_basename = "{env}.yml".format(env=self._env)
+        return os.path.join(vars_dir, env_config_basename)
+
+    @staticmethod
+    def _form_creds_path(vars_dir: str) -> str:
+        creds_basename = 'creds.yml'
+        return os.path.join(vars_dir, creds_basename)

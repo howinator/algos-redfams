@@ -35,5 +35,6 @@ virtualenv -p $(which python3.6) reddit-venv --no-site-packages
 source reddit-venv/bin/activate
 pip install -r requirements.txt
 
-gsutil cp gs://howinator-config/creds.yml /opt/apps/algos-redfams/infra/vars/creds.yml
+gsutil cp gs://howinator-config/creds.yml /opt/apps/algos-redfams/infra/vars/creds.ym
+cd src
 python ./scraper-entry.py prod
