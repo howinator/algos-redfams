@@ -28,6 +28,8 @@ def form_graph(env):
     user_sub_groups = [(user, [sub for subuser, sub in group]) for (user, group) in
                        groupby(user_sub_results, lambda x: x[0])]
     subs = tuple([x[0] for x in sub_results])
+    del(user_sub_results)
+    del(sub_results)
 
     # Adj List -- not prefilled -- better for sparse graphs
     adj_dict = {name: {} for name in subs}

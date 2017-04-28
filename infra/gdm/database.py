@@ -8,7 +8,7 @@ def GenerateConfig(u):
                 'region': 'us-central1',
                 'databaseVersion': 'POSTGRES_9_6',
                 'settings': {
-                    'tier': 'db-custom-2-8192',
+                    'tier': 'db-custom-1-4096',
                     'locationPreference': {
                         'zone': 'us-central1-f'
                     },
@@ -28,6 +28,10 @@ def GenerateConfig(u):
                                 'value': '72.48.183.29/32'
                             }
                         ]
+                    },
+                    'backupConfiguration': {
+                        'startTime': '07:30',
+                        'enabled': True
                     }
                 }
             }
