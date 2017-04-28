@@ -3,7 +3,6 @@ from collections import defaultdict
 from heapq import *
 from pprint import pprint
 
-
 ########################################
 # Dijkstra's Shortest Path Algorithm
 #
@@ -19,8 +18,7 @@ from pprint import pprint
 #
 ########################################
 def dijkstra(graph, src):
-    numVertices = len(graph.keys())
-    weights = {}
+    weights = {node: (sys.maxsize, '') for node in graph.keys()}
     weights[src] = (0, '')
     minHeap = [(0,src,'')]
     visited = set()
@@ -30,9 +28,7 @@ def dijkstra(graph, src):
             visited.add(v1)
             path = v1 + ", " + path
             for v2, moreWeight in graph[v1].items():
-                curWeight = sys.maxsize
-                if v2 in weights:
-                    curWeight = weights[v2][0]
+                curWeight = weights[v2][0]
                 if ((v2 not in visited) and (weight + moreWeight < curWeight)):
                     weights[v2] = (weight + moreWeight, path);
                     heappush(minHeap, (weight+moreWeight, v2, path))
