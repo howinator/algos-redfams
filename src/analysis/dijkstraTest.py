@@ -1,5 +1,7 @@
-from dijkstra import dijkstra
-import unittest, json
+import json
+import unittest
+
+from src.analysis.dijkstra import dijkstra
 
 
 class DijkstraTest(unittest.TestCase):

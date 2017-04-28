@@ -36,4 +36,5 @@ source reddit-venv/bin/activate
 pip install -r requirements.txt
 
 gsutil cp gs://howinator-config/creds.yml /opt/apps/algos-redfams/infra/vars/creds.yml
+cd src
 python ./scraper-entry.py prod

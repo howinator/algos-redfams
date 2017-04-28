@@ -22,6 +22,10 @@ def GenerateConfig(u):
                             {
                                 'name': 'Internal Network',
                                 'value': '$(ref.instance-static-ip.address)'
+                            },
+                            {
+                                'name': 'Howie home',
+                                'value': '72.48.183.29/32'
                             }
                         ]
                     }
