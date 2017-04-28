@@ -41,7 +41,7 @@ def main(argv):
         except praw.exceptions.PRAWException as e:
             print("API Exception: " + str(e) + "\nLast User: " + user)
             continue
-        except prawcore.exceptions.PrawcoreException as e:
+        except prawcore.exceptions.PrawcoreException as ex:
             print("Prawcore exception: " + str(ex) + "\nLast User: " + user)
             continue
 

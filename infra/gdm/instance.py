@@ -38,7 +38,7 @@ def GenerateConfig(u):
                                       'git clone https://github.com/howinator/algos-redfams.git\n',
                                       'cp algos-redfams/infra/vm-init.sh ~\n',
                                       'cd ~\n',
-                                      './vm-init.sh'
+                                      './vm-init.sh\n\n'
                                       ])
                 }]
             },
@@ -53,7 +53,7 @@ def GenerateConfig(u):
         'name': 'instance-static-ip',
         'type': 'compute.v1.address',
         'properties':{
-            'name': 'instance-staic-ip',
+            'name': 'instance-static-ip',
             'region': 'us-central1'
         }
     }]
