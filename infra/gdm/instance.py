@@ -53,7 +53,7 @@ def GenerateConfig(u):
         'name': 'instance-static-ip',
         'type': 'compute.v1.address',
         'properties':{
-            'name': 'instance-static-ip',
+            'name': 'instance-staic-ip',
             'region': 'us-central1'
         }
     }]

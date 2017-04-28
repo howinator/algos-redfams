@@ -5,15 +5,16 @@
 #  Usage: ./scraper-entry.py [local | prod]
 #
 # # # # # # # # # # # # # # # # # # #
-
+import os.path
 import sys
 
 import praw
 import praw.exceptions
 import prawcore
 
-import src.helper.aux as aux
-
+# import src.helper.aux as aux
+sys.path.append(os.path.abspath('./helper'))
+import aux
 
 def main(argv):
     agent_str = 'Scraper script by /u/howinator'
