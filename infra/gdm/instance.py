@@ -36,7 +36,7 @@ def GenerateConfig(u):
                     'value': ''.join(['#!/usr/bin/env bash\n',
                                       'cd /tmp/\n',
                                       'git clone https://github.com/howinator/algos-redfams.git\n',
-                                      'cp algos/redfams/infra/vm-init.sh ~\n',
+                                      'cp algos-redfams/infra/vm-init.sh ~\n',
                                       'cd ~\n',
                                       './vm-init.sh'
                                       ])
