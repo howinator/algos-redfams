@@ -40,10 +40,13 @@ def main(argv):
                     db.add_subreddits(subreddit_list)
                     db.add_comments(username_list, subreddit_list)
         except praw.exceptions.PRAWException as e:
-            print("API Exception: " + str(e) + "\nLast User: " + user)
+            print("API Exception: " + str(e) + "\nLast User: " + username)
             continue
-        except prawcore.exceptions.PrawcoreException as ex:
-            print("Prawcore exception: " + str(ex) + "\nLast User: " + user)
+        except prawcore.exceptions.PrawcoreException as e:
+            print("Prawcore exception: " + str(e) + "\nLast User: " + username)
+            continue
+        except Exception as e:
+            print("Unknown exception" + str(e))
             continue
 
 
