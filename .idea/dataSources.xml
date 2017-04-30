@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:32768/algosreddit</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="PostgreSQL - prod" uuid="faa8743f-c4de-42e7-95f0-cd0292246979">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://104.198.43.96:5432/algosreddit</jdbc-url>
+    </data-source>
   </component>
 </project>

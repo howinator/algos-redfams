@@ -1,6 +1,6 @@
 from dijkstra import dijkstra
-#from bellmanford import bellmanford
-import os, json, argparse, time
+import bellman_ford as bf
+import os, json, argparse, time, sys
 from pprint import pprint
 
 parser = argparse.ArgumentParser()
@@ -36,11 +36,11 @@ if (args.algo == 'both') or (args.algo == 'dijkstra'):
     end = time.time()
     runtime = end - start
     printResults('Dijkstra', args.source, shortPaths, runtime)
-'''
+
 if (args.algo == 'both') or (args.algo == 'bellmanford'):
     start = time.time()
-    shortPaths = bellmanford(adj_list,args.source)
+    shortPaths = bf.bellman_ford(adj_list,args.source)[0]
     end = time.time()
-    run_time = end - start
-    printResults('Bellman-Ford', shortPaths, runtime)
-'''
+    runtime = end - start
+    printResults('Bellman-Ford', args.source, shortPaths, runtime)
+

@@ -67,10 +67,11 @@ class SQLWrapper(object):
 
         return results
 
-    def get_user_sub_pairs(self) -> List[Tuple[str]]:
+    def get_user_sub_pairs(self, subreddits: Tuple[str] = None) -> List[Tuple[str]]:
         """
         Simply returns unique (username, subreddit) pairs sorted by username
         """
+
 
         with self.con.cursor() as cur:
             query="SELECT DISTINCT username, subreddit FROM comments GROUP BY username, subreddit ORDER BY username;"
