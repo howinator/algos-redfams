@@ -1,0 +1,157 @@
+I%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University Assignment Title Page
+% LaTeX Template
+% Version 1.0 (27/12/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% WikiBooks (http://en.wikibooks.org/wiki/LaTeX/Title_Creation)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Instructions for using this template:
+% This title page is capable of being compiled as is. This is not useful for
+% including it in another document. To do this, you have two options:
+%
+% 1) Copy/paste everything between \begin{document} and \end{document}
+% starting at \begin{titlepage} and paste this into another LaTeX file where you
+% want your title page.
+% OR
+% 2) Remove everything outside the \begin{titlepage} and \end{titlepage} and
+% move this file to the same directory as the LaTeX file you wish to add it to.
+% Then add \input{./title_page_1.tex} to your LaTeX file where you want your
+% title page.
+%
+% template taken from https://www.overleaf.com/latex/examples/title-page-with-logo/hrskypjpkrpd#.WDXHQKIrLdc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\title{Title page with logo}
+%----------------------------------------------------------------------------------------
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{amsmath}
+\usepackage{courier}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{url}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%   HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE The University of Texas at Austin}\\[1.5cm] % Name of your university/college
+\textsc{\Large Algorithmic Foundations}\\[0.5cm] % Major heading such as course name
+\textsc{\large Software Engineering - Option III}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%   TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Determining Similar Subreddits from Graph Traversal Algorithms}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+
+%----------------------------------------------------------------------------------------
+%   AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Howie \textsc{Benefiel}\\
+Kelsey \textsc{Pate II} \\
+Tyler \textsc{King}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Professor:} \\
+Dr. Sarfraz \textsc{Khurshid} % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%   DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%   LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{logo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}
+
+\section{Reddit Scraper}
+
+\section{Dijkstra�s Shortest Path Algorithm}
+	The main idea of Dijkstra�s Algorithm is to initialize all path distances to infinity, then starting from the source node, check all adjacent nodes for a shorter path. If a shorter path is found, save the path and push it into a priority queue where it will be sorted by minimum distance. After all adjacent nodes are checked, you add the current node to a list of traversed nodes and move to the next smallest node in the priority queue, which will be at the top of the heap. The process is repeated until the priority queue is empty and you are left with the shortest path to each node from the source node.
+
+\subsection{Implementation}
+	Dijkstra�s Shortest Path Algorithm was implemented in python as a function that accepts an adjacency list representation of a graph and the source node. The implementation is shown in Figure X.
+XXX: INSERT CODE SCREENSHOT
+       The python library heapq was used to implement the priority queue structure. The function heappush() adds an element into the queue and heappop() removes and returns the top (smallest) element. Both functions run in \[O(log(h_n))\] time, where \[h_n\] is the number of elements in the queue.
+       
+\subsection{Analysis}
+	The priority queue implementation of Dijkstra�s Algorithm runs in \[O(Elog(V))\] time where E is the number of edges and V is the number of vertices in a graph. In the worst case (a fully connected graph), each vertex is connected to V-1 other vertices, therefore the max size of our heap is O(V) and the heappush() and heappop() functions become O(log(V)). We analyze each connected edge of each vertex, which has a maximum value of E, giving a total function order of \[O(Elog(V))\].
+
+\section{Bellman-Ford�s Shortest Path Algorithm}
+  Bellman-Ford�s is more complex than Dijkstra�s, but can handle negative edge-weights. The algorithm is built around the concept of "relaxing." An infinite amount of distance is assumed at first. Over time, the value is replaced with increasingly accurate values until the optimal path is achieved. This is done on all edges V - 1 times (V = vertices).
+
+\subsection{Implementation}
+  Bellman-Ford�s algorithm was implemented in python as a function that accepts an adjacency list representation of a graph and the source node. The implementation is shown in Figure X
+XXX: INSERT CODE SCREENSHOT
+        The python library defaultdict is used to represent the destination and predecessor to keep track of distance. Function Initialize creates the destination and predecessor. Relax gradually determines shortest path and then negatative edge-weights are handled last.
+       
+\subsection{Analysis}
+  The initialization of dictionaries runs in \[O(1)\]. Relax runs in \[O(1)\] as well. Where the additional overhead comes in the algorithm itself taking \[O(V*E)\] where V is vertices and E is edges. This gives us a total run time of a constant C + \[O(V*E)\].
+
+\section{Testing Implementation Correctness}
+	In order to ensure algorithm correctness, a test suite was implemented to check the resulting shortest path results from each algorithm. The correctness check only checks the distance between the source vertex and the destination node and does not compare the path taken. This is because there is no �correct� path when multiple exist of the same distance between source and destination. To illustrate this, imagine a four vertex undirected graph connected by edges (1,2),(2,4),(1,3),(3,4). You can travel from vertex 1 to vertex 4 in two steps either through vertex 2 or vertex 3. They are both valid shortest paths from vertex 1 to vertex 4, as would any path with a distance of two steps.
+	The test suite contained in the test.py source file contains two test cases. Test Case 1 is a randomized test that compares the resulting shortest path result for each destination vertex of the Dijkstra and Bellman-Ford functions for the same graph and 50 randomly selected source vertices. This test case is intended to provide additional coverage each time the test is executed. A full-coverage test could have been implemented, but the execution time would not have been ideal for a demonstration. Test Case 2 runs each algorithm against a relatively small graph for a predetermined source node and checks the results against precomputed results. This test case ensures there is no logical flaw that exists in both algorithms that would cause Test Case 1 to report a false pass.
+
+\section{Performance Comparison}
+
+\section{Conclusion}
+
+
+
+\end{document}
+
