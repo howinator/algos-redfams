@@ -97,4 +97,6 @@ reddit-venv/
 # LaTeX files
 *.aux
 *.out
-adj*.json
+/src/analysis/out/**
+!/src/analysis/out/dummy.json
+!**.gitkeep

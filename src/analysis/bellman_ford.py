@@ -33,16 +33,11 @@ def bellman_ford(graph, src):
     for i in range(l-1): 
         for u, edges in graph.items():
             for v in edges.keys():
-                continue
                 if d[v] > d[u] + graph[u][v]:
                     # lower distance
                     d[v]  = d[u] + graph[u][v]
                     p[u] = v
-                    print("u", u)
-                    print("v", v)
-        print("i", i)
      #deal with negative edge-weights
-    print("41")
     for u in graph:
         for v in graph[u]:
             assert d[v] <= d[u] + graph[u][v]

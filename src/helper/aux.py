@@ -2,7 +2,6 @@ from typing import List, Dict, Union, Any, Tuple
 import os.path
 import yaml
 
-
 import psycopg2 as pg
 import psycopg2.extras as pgextra
 
@@ -71,12 +70,27 @@ class SQLWrapper(object):
         """
         Simply returns unique (username, subreddit) pairs sorted by username
         """
+        if subreddits is not None:
+            with self.con.cursor() as cur:
+                query = """
+                  SELECT DISTINCT username, subreddit FROM comments 
+                    WHERE subreddit IN %s 
+                    GROUP BY username, subreddit 
+                    ORDER BY username;
+                """
+                proc_query = cur.mogrify(query, subreddits,)
+                cur.execute(proc_query)
+                results = cur.fetchall()
 
-
-        with self.con.cursor() as cur:
-            query="SELECT DISTINCT username, subreddit FROM comments GROUP BY username, subreddit ORDER BY username;"
-            cur.execute(query)
-            results = cur.fetchall()
+        else:
+            with self.con.cursor() as cur:
+                query = """
+                  SELECT DISTINCT username, subreddit FROM comments
+                    GROUP BY username, subreddit
+                    ORDER BY username;
+                """
+                cur.execute(query)
+                results = cur.fetchall()
 
         return results
 
