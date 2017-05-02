@@ -40,19 +40,6 @@ def generate_graphs(source: str, start: int = 1, stop: int = 100, step: int = 10
     exclusive_lower_limit = start - step
     step *= -1
 
-    # local_graph = form_graph(local)
-    # write_graph(local_graph, local)
-    #
-    # prod_graph = form_graph(prod)
-    # write_graph(prod_graph, prod)
-    #
-    # if source == local:
-    #     prev_test_case = local_graph
-    #     del prod_graph
-    # else:
-    #     prev_test_case = prod_graph
-    #     del local_graph
-
     prev_test_case = form_graph(source)
     write_graph(prev_test_case, source)
 
@@ -62,7 +49,7 @@ def generate_graphs(source: str, start: int = 1, stop: int = 100, step: int = 10
         possible_subs = sample(prev_test_case.keys(), num_ele)
         new_test_case = form_subset_graph(prev_test_case, possible_subs)
         del prev_test_case
-        write_graph(new_test_case, num_ele)
+        write_graph(new_test_case, num_ele, source)
         prev_test_case = new_test_case
 
 
@@ -73,7 +60,8 @@ def form_subset_graph(orig_graph: AdjGraphDict, new_sub_set: List[str]) -> AdjGr
 
 def form_graph(env: str) -> AdjGraphDict:
     """
-    
+    Connects to database and forms graph from entire data set
+
     :param env: 
     :return: Returns a dict representing the graph
     """
@@ -108,9 +96,10 @@ def form_graph(env: str) -> AdjGraphDict:
     return adj_dict
 
 
-def write_graph(graph: AdjGraphDict, suffix: str) -> None:
+def write_graph(graph: AdjGraphDict, suffix: str, env: str = None) -> None:
     """
     Writes graph to disk
+    :param env: 
     :param graph: Dict-based graph to write to disk
     :param suffix: str to append to filename before extension. Also determines directory to write to
     :return: side effect of writing to disk
@@ -118,11 +107,13 @@ def write_graph(graph: AdjGraphDict, suffix: str) -> None:
     dir_name = os.path.dirname(__file__)
     if suffix in ('prod', 'local'):
         out_file_path = os.path.join(dir_name, 'out', 'adj_{suffix}.json'.format(suffix=suffix))
-    else:
-        out_file_path = os.path.join(dir_name, 'out', 'tests', '{suffix}.json'.format(suffix=suffix))
-
-    with open(out_file_path, 'w') as outfile:
+        with open(out_file_path, 'w') as outfile:
             json.dump(graph, outfile, sort_keys=True, indent=4, separators=(',', ': '))
+    else:
+        out_file_path = os.path.join(dir_name, 'out', 'tests', env, '{suffix}.json'.format(suffix=suffix))
+        with open(out_file_path, 'w') as outfile:
+            json.dump(graph, outfile)
+
 
 
 if __name__ == '__main__':

@@ -100,3 +100,4 @@ reddit-venv/
 /src/analysis/out/**
 !/src/analysis/out/dummy.json
 !**.gitkeep
+!/src/analysis/out/results/

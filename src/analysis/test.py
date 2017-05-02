@@ -1,10 +1,15 @@
-<<<<<<< HEAD
+import argparse
 import os
 import yaml
 import json
 import cProfile as profile
 import pstats
-from typing import Dict
+from typing import Dict, Tuple
+
+import matplotlib
+matplotlib.use('TkAgg')
+
+import matplotlib.pyplot as plt
 
 from bellman_ford import bellman_ford as bf
 from dijkstra import dijkstra as dj
@@ -14,12 +19,12 @@ DIJKSTRA = 'dijkstra'
 BELLMANFORD = 'bellman_ford'
 
 
-def run_tests():
+def run_tests(source: str):
     max_str = 'max'
     min_str = 'min'
 
     parent_dir = os.path.dirname(__file__)
-    test_case_dir = os.path.join(parent_dir, 'out', 'tests')
+    test_case_dir = os.path.join(parent_dir, 'out', 'tests', source)
     results_dir = os.path.join(parent_dir, 'out', 'results')
     test_files = os.listdir(test_case_dir)
     test_files = [file for file in test_files if 'json' in file]
@@ -46,7 +51,7 @@ def run_tests():
         results_dict[DIJKSTRA][min_str][test_size] = profile_call(DIJKSTRA, case, min_degree_vertex)
         results_dict[DIJKSTRA][max_str][test_size] = profile_call(DIJKSTRA, case, max_degree_vertex)
 
-    results_file_basename = "test-results-{min_v}-{max_v}.json".format(min_v=str(test_sizes[0]), max_v=str(test_sizes[-1]))
+    results_file_basename = "{env}-test-results-{min_v}-{max_v}.json".format(min_v=str(test_sizes[0]), max_v=str(test_sizes[-1]), env=source)
     results_file_full_path = os.path.join(results_dir, results_file_basename)
     with open(results_file_full_path, 'w') as f:
         json.dump(results_dict, f, sort_keys=True, indent=4, separators=(',', ': '))
@@ -68,53 +73,81 @@ def read_basename(base_dir: str, basename: str) -> AdjGraphDict:
         loaded = json.load(f)
     return loaded
 
-'''
-from time import sleep
-def foo(a):
-    sleep(1)
-prof=profile.Profile()
-prof.runctx('foo(b)', {'foo': foo, 'b': 4}, {})
-<cProfile.Profile object at 0x1073223f0>
-new_stat=pstats.Stats(prof)
-new_stat.total_tt
-1.0043059999999997
 
-'''
+def plot_results(filename: str) -> None:
+    base_dir = os.path.dirname(__file__)
+    results_dir = os.path.join(base_dir, 'out', 'results')
+    results_file = os.path.join(results_dir, filename)
+    with open(results_file) as f:
+        results_data = json.load(f)
+    pink = (194, 227, 119)
+    green =(227, 119, 194)
+    def convert_color(rgb: Tuple[int]) -> Tuple[float]:
+        return rgb[0] / 255., rgb[1] / 255., rgb[2] / 255.
+    bf_color = convert_color(pink)
+    dj_color = convert_color(green)
 
-'''
-from time import sleep
-def foo(a):
-    time.sleep(1)
-prof=profile.Profile()
-prof.runctx('foo(b)', {'foo': foo, 'a': 4}, {})
-Traceback (most recent call last):
-  File "<input>", line 1, in <module>
-  File "/Users/howie/.pyenv/versions/3.6.1/lib/python3.6/cProfile.py", line 100, in runctx
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-NameError: name 'b' is not defined
-prof.runctx('foo(b)', {'foo': foo, 'b': 4}, {})
-Traceback (most recent call last):
-  File "<input>", line 1, in <module>
-  File "/Users/howie/.pyenv/versions/3.6.1/lib/python3.6/cProfile.py", line 100, in runctx
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-  File "<input>", line 2, in foo
-NameError: name 'time' is not defined
-def foo(a):
-    sleep(1)
-prof.runctx('foo(b)', {'foo': foo, 'b': 4}, {})
-<cProfile.Profile object at 0x1073223f0>
-new_stat=pstats.Stats(prof)
-new_stat.time_tt
-Traceback (most recent call last):
-  File "<input>", line 1, in <module>
-AttributeError: 'Stats' object has no attribute 'time_tt'
-new_stat.total_tt
-1.0043059999999997
+    bf_min = results_data[BELLMANFORD]['min']
+    bf_max = results_data[BELLMANFORD]['max']
+    dj_min = results_data[DIJKSTRA]['min']
+    dj_max = results_data[DIJKSTRA]['max']
 
-'''
+    plt.figure(figsize=(12, 9))
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+
+    # Remove plot frame lines
+    ax = plt.subplot(111)
+    ax.spines['top'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    # Ensure axis ticks only show on bottom and left
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+
+    # FIXME Use sane limits
+    x_lim = (500, 10500)
+    y_lim = (0, 1)
+    x_range = (0, 105, 10)
+
+    plt.ylim(*y_lim)
+    plt.xlim(*x_lim)
+
+    # Make sure ticks are large enough to easily read.
+    plt.yticks([x / 100. for x in range(*x_range)], [str(x) + 'ms' for x in [x / 100. for x in range(*x_range)]], fontsize=14)
+    plt.xticks(fontsize=14)
+
+    # Provide tick lines across plot
+    for y in range(*x_range):
+        y /= 100.
+        plt.plot(range(*x_lim), [y] * len(range(*x_lim)), "--", lw=0.5, color="black", alpha=0.3)
+
+    # Remove default tick marks
+    plt.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='on', left='off', right='off', labelleft='on')
+
+    def plot_data(dataset: Dict[str, float], label: str, marker: str, color: str):
+        zipped_data = zip(dataset.keys(), dataset.values())
+        sorted_data = sorted(zipped_data, key=(lambda x: int(x[0])))
+        return plt.plot([int(x[0]) for x in sorted_data], [x[1] for x in sorted_data], marker=marker, color=color, label=label)
+
+    first = plot_data(bf_min, 'Bellman Ford, Min-Degree', 'o', bf_color)
+    second = plot_data(bf_max, 'Bellman FOrx, Max-Degree', 'x', bf_color)
+    third = plot_data(dj_min, 'Dijkstra, Min-Degree', 'o', dj_color)
+    fourth = plot_data(dj_max, 'Dijkstra, Max-Degree', 'x', dj_color)
+    legend = plt.legend()
+    plt.savefig(os.path.join(results_dir, "{file}-plot.png".format(file=filename)), bbox_inches="tight")
 
 
 if __name__ == '__main__':
-    run_tests()
+    parser = argparse.ArgumentParser()
+    default = -1
+    parser.add_argument('source', type=str)
+    args=parser.parse_args()
+    # If you give it an environment, run the test suite
+    if args.source in ('local', 'prod'):
+        run_tests(args.source)
+    # if it's not an env, just build the graph
+    else:
+        plot_results(args.source)
