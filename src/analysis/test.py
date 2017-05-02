@@ -7,7 +7,7 @@ import pstats
 from typing import Dict, Tuple
 
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('svg')
 
 import matplotlib.pyplot as plt
 
@@ -116,7 +116,7 @@ def plot_results(filename: str) -> None:
     plt.xlim(*x_lim)
 
     # Make sure ticks are large enough to easily read.
-    plt.yticks([x / 100. for x in range(*x_range)], [str(x) + 'ms' for x in [x / 100. for x in range(*x_range)]], fontsize=14)
+    plt.yticks([x / 100. for x in range(*x_range)], [str(x) + ' ms' for x in [x / 100. for x in range(*x_range)]], fontsize=14)
     plt.xticks(fontsize=14)
 
     # Provide tick lines across plot
@@ -133,17 +133,20 @@ def plot_results(filename: str) -> None:
         return plt.plot([int(x[0]) for x in sorted_data], [x[1] for x in sorted_data], marker=marker, color=color, label=label)
 
     first = plot_data(bf_min, 'Bellman Ford, Min-Degree', 'o', bf_color)
-    second = plot_data(bf_max, 'Bellman FOrx, Max-Degree', 'x', bf_color)
+    second = plot_data(bf_max, 'Bellman Ford, Max-Degree', 'x', bf_color)
     third = plot_data(dj_min, 'Dijkstra, Min-Degree', 'o', dj_color)
     fourth = plot_data(dj_max, 'Dijkstra, Max-Degree', 'x', dj_color)
     legend = plt.legend()
-    plt.savefig(os.path.join(results_dir, "{file}-plot.png".format(file=filename)), bbox_inches="tight")
+    # Change font size of legend
+    plt.setp(plt.gca().get_legend().get_texts(), fontsize=14)
+    # plt.gcf().canvas.renderer.dpi = 300
+    plt.savefig(os.path.join(results_dir, "{file}-plot.svg".format(file=filename)), bbox_inches="tight")
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     default = -1
-    parser.add_argument('source', type=str)
+    parser.add_argument('source', type=str, help="Either the env source for running test or the file name of the results json file for graph")
     args=parser.parse_args()
     # If you give it an environment, run the test suite
     if args.source in ('local', 'prod'):
