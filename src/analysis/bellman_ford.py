@@ -14,30 +14,27 @@ def init(graph, source):
     dest = dict() 
     pred = dict()
     for node in graph:
-        dest[node] = float('Inf') #assume everything is infinitely far away
+        dest[node] = sys.maxsize #assume everything is infinitely far away
         pred[node] = None
     dest[source] = 0 #from source to itself
     return dest, pred
 
-def relax(node, adj, graph, d, p):
-    # If the distance between the node and the neighbour is lower than the one I have now
-    if d[adj] > d[node] + graph[node][adj]:
-        # lower distance
-        d[adj]  = d[node] + graph[node][adj]
-        p[adj] = node
-
-def bellman_ford(graph, src):
-    
+def bellman_ford(graph, src):  
     d, p = init(graph, src)
     l = len(graph)
-    for i in range(l-1): 
+    change = True
+    for i in range(l-1):
+        if not(change):
+            continue
+        change = False
         for u, edges in graph.items():
-            for v in edges.keys():
-                if d[v] > d[u] + graph[u][v]:
+            for v, wt in edges.items():
+                if d[v] > d[u] + wt:
+                    change = True
                     # lower distance
-                    d[v]  = d[u] + graph[u][v]
+                    d[v]  = d[u] + wt
                     p[u] = v
-     #deal with negative edge-weights
+    #deal with negative edge-weights
     for u in graph:
         for v in graph[u]:
             assert d[v] <= d[u] + graph[u][v]
